@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    container_name: postgres_playlists
+    environment:
+      POSTGRES_USER: playlist_user
+      POSTGRES_PASSWORD: playlist_pass
+      POSTGRES_DB: playlist_db
+    ports:
+      - "5435:5432"

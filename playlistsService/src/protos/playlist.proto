@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package playlist;
+
+service PlaylistService {
+  rpc CreatePlaylist (CreatePlaylistInput) returns (Playlist);
+  rpc AddVideoToPlaylist (AddVideoInput) returns (Playlist);
+  rpc GetPlaylistsByUser (UserId) returns (PlaylistList);
+  rpc GetVideosFromPlaylist (GetVideosPlayListInput) returns (VideoList);
+  rpc RemoveVideoFromPlaylist (RemoveVideoInput) returns (Empty);
+  rpc DeletePlaylist (RemovePlaylistInput) returns (Empty);
+}
+
+message CreatePlaylistInput {
+  string userId = 1;
+  string name = 2;
+}
+
+message AddVideoInput {
+  string userId = 1;
+  string playlistId = 2;
+  string videoId = 3;
+}
+
+message RemoveVideoInput {
+  string userId = 1;
+  string playlistId = 2;
+  string videoId = 3;
+}
+
+message RemovePlaylistInput {
+  string userId = 1;
+  string playlistId = 2;
+}
+
+message GetVideosPlayListInput {
+  string userId = 1;
+  string playlistId = 2;
+}
+
+message UserId {
+  string userId = 1;
+}
+
+message Playlist {
+  string id = 1;
+  string name = 2;
+  string userId = 3;
+  string createdAt = 4;
+}
+
+message SimplePlaylist {
+  string id = 1;
+  string name = 2;
+}
+
+message PlaylistList {
+  repeated SimplePlaylist playlists = 1;
+}
+
+message Video {
+  string id = 1;
+  string videoName = 2;
+}
+
+message VideoList {
+  repeated Video videos = 1;
+}
+
+message Empty {}
