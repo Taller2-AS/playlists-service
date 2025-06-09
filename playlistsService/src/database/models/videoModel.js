@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
     }
   }, {
     tableName: 'videos',

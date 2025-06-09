@@ -1,6 +1,7 @@
 const { Playlists, VideoPlaylists } = require('../database/sequelize');
 const catchAsync = require('../utils/catchAsync');
 const { getChannel, EXCHANGE_NAME } = require('../queue/config/connection');
+const publishLog = require('../queue/publisher/logPublisher');
 
 const CreatePlaylist = catchAsync(async (call, callback) => {
   const { userId, name } = call.request;
@@ -14,22 +15,15 @@ const CreatePlaylist = catchAsync(async (call, callback) => {
   }
 
   const newPlaylist = await Playlists.create({ userId, name });
-  
-  /*
-  EJEMPLO DE PUBLICACIÓN EN COLA
 
-  const channel = await getChannel();
-  channel.publish(
-    EXCHANGE_NAME,
-    '',
-    Buffer.from(JSON.stringify({
-      event: 'USER_CREATED',
-      videoId: newUser.id.toString(),
-      email: newUser.email,
-      timestamp: new Date().toISOString()
-    }))
-  );
-  */
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'CreatePlaylist',
+    url: '/listas-reproduccion',
+    action: 'CREAR LISTA DE REPRODUCCIÓN',
+    date: new Date().toISOString()
+  });
 
   callback(null, {
     id: newPlaylist.id,
@@ -60,6 +54,15 @@ const AddVideoToPlaylist = catchAsync(async (call, callback) => {
   }
   await VideoPlaylists.create({ playlistId, videoId });
 
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'AddVideoToPlaylist',
+    url: `/listas-reproduccion/${id}/videos`,
+    action: 'AÑADIR VIDEO A LISTA DE REPRODUCCIÓN',
+    date: new Date().toISOString()
+  });
+
   callback(null, {
     userId,
     playlistId,
@@ -82,6 +85,15 @@ const GetPlaylistsByUser = catchAsync(async (call, callback) => {
       name: p.name,
     }))
   };
+
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'GetPlaylistsByUser',
+    url: `/listas-reproduccion`,
+    action: 'OBTENER LISTAS DE REPRODUCCIÓN POR USUARIO',
+    date: new Date().toISOString()
+  });
 
   callback(null, result);
 });
@@ -110,6 +122,15 @@ const GetVideosFromPlaylist = catchAsync(async (call, callback) => {
       name: v.videoName 
     }))
   };
+
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'GetVideosFromPlaylist',
+    url: `/listas-reproduccion/${id}/videos`,
+    action: 'OBTENER VIDEOS DE LISTA DE REPRODUCCIÓN',
+    date: new Date().toISOString()
+  });
 
   callback(null, result);
 });
@@ -142,6 +163,15 @@ const RemoveVideoFromPlaylist = catchAsync(async (call, callback) => {
     return callback(new Error('El video no se encontró en la lista'));
   }
 
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'RemoveVideoFromPlaylist',
+    url: `/listas-reproduccion/${id}/videos`,
+    action: 'ELIMINAR VIDEO DE LISTA DE REPRODUCCIÓN',
+    date: new Date().toISOString()
+  });
+
   callback(null, {});
 });
 
@@ -163,6 +193,15 @@ const DeletePlaylist = catchAsync(async (call, callback) => {
 
   await VideoPlaylists.destroy({ where: { playlistId } });
   await Playlists.destroy({ where: { id: playlistId } });
+
+  await publishLog('action', {
+    userId: userId,
+    email: null,
+    method: 'DeletePlaylist',
+    url: `/listas-reproduccion/${id}`,
+    action: 'ELIMINAR LISTA DE REPRODUCCIÓN',
+    date: new Date().toISOString()
+  });
 
   callback(null, {});
 });
