@@ -4,7 +4,7 @@ config({ path: '.env' });
 const { Server, ServerCredentials } = require('@grpc/grpc-js');
 const loadProto = require('./src/utils/loadProto');
 const PlaylistService = require('./src/services/playlistsService');
-
+const inicializeQueueConsumers = require('./src/queue');
 const { sequelize } = require('./src/database/sequelize'); 
 
 config({path: '.env'});
@@ -12,7 +12,11 @@ config({path: '.env'});
 const server = new Server();
 
 sequelize.authenticate()
-  .then(() => {
+  .then(async() => {
+
+    await initializeQueueConsumers();
+    console.log('✅ RabbitMQ Consumers inicializados');
+
     console.log('Conexión a PostgreSQL exitosa');
     return sequelize.sync();
   })
