@@ -1,4 +1,4 @@
-const publishLog = require('../utils/publishLog');
+const publishLog = require('../queue/publisher/logPublisher');
 
 function catchAsync(fn) {
   return (call, callback) => {
