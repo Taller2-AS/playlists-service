@@ -14,7 +14,7 @@ const server = new Server();
 sequelize.authenticate()
   .then(async() => {
 
-    await initializeQueueConsumers();
+    await inicializeQueueConsumers();
     console.log('✅ RabbitMQ Consumers inicializados');
 
     console.log('Conexión a PostgreSQL exitosa');
