@@ -13,33 +13,39 @@ service PlaylistService {
 
 message CreatePlaylistInput {
   string userId = 1;
-  string name = 2;
+  string userEmail = 2;
+  string name = 3;
 }
 
 message AddVideoInput {
   string userId = 1;
-  string playlistId = 2;
-  string videoId = 3;
+  string userEmail = 2;
+  string playlistId = 3;
+  string videoId = 4;
 }
 
 message RemoveVideoInput {
   string userId = 1;
-  string playlistId = 2;
-  string videoId = 3;
+  string userEmail = 2;
+  string playlistId = 3;
+  string videoId = 4;
 }
 
 message RemovePlaylistInput {
   string userId = 1;
-  string playlistId = 2;
+  string userEmail = 2;
+  string playlistId = 3;
 }
 
 message GetVideosPlayListInput {
   string userId = 1;
-  string playlistId = 2;
+  string userEmail = 2;
+  string playlistId = 3;
 }
 
 message UserId {
   string userId = 1;
+  string userEmail = 2;
 }
 
 message Playlist {

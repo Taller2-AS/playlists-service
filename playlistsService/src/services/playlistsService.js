@@ -4,7 +4,7 @@ const { getChannel, EXCHANGE_NAME } = require('../queue/config/connection');
 const publishLog = require('../queue/publisher/logPublisher');
 
 const CreatePlaylist = catchAsync(async (call, callback) => {
-  const { userId, name } = call.request;
+  const { userId, userEmail, name } = call.request;
   
   if (!userId){
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -18,7 +18,7 @@ const CreatePlaylist = catchAsync(async (call, callback) => {
 
   await publishLog('action', {
     userId: userId,
-    email: null,
+    email: userEmail,
     method: 'CreatePlaylist',
     url: '/listas-reproduccion',
     action: 'CREAR LISTA DE REPRODUCCIÓN',
@@ -34,7 +34,7 @@ const CreatePlaylist = catchAsync(async (call, callback) => {
 });
 
 const AddVideoToPlaylist = catchAsync(async (call, callback) => {
-  const { userId, playlistId, videoId } = call.request;
+  const { userId, userEmail, playlistId, videoId } = call.request;
 
   if (!userId){
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -56,7 +56,7 @@ const AddVideoToPlaylist = catchAsync(async (call, callback) => {
 
   await publishLog('action', {
     userId: userId,
-    email: null,
+    email: userEmail,
     method: 'AddVideoToPlaylist',
     url: `/listas-reproduccion/${id}/videos`,
     action: 'AÑADIR VIDEO A LISTA DE REPRODUCCIÓN',
@@ -71,7 +71,7 @@ const AddVideoToPlaylist = catchAsync(async (call, callback) => {
 });
 
 const GetPlaylistsByUser = catchAsync(async (call, callback) => {
-  const { userId } = call.request;
+  const { userId, userEmail } = call.request;
 
   if (!userId) {
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -88,7 +88,7 @@ const GetPlaylistsByUser = catchAsync(async (call, callback) => {
 
   await publishLog('action', {
     userId: userId,
-    email: null,
+    email: userEmail,
     method: 'GetPlaylistsByUser',
     url: `/listas-reproduccion`,
     action: 'OBTENER LISTAS DE REPRODUCCIÓN POR USUARIO',
@@ -99,7 +99,7 @@ const GetPlaylistsByUser = catchAsync(async (call, callback) => {
 });
 
 const GetVideosFromPlaylist = catchAsync(async (call, callback) => {
-  const { userId, playlistId } = call.request;
+  const { userId, userEmail, playlistId } = call.request;
 
   if (!userId) {
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -125,7 +125,7 @@ const GetVideosFromPlaylist = catchAsync(async (call, callback) => {
 
   await publishLog('action', {
     userId: userId,
-    email: null,
+    email: userEmail,
     method: 'GetVideosFromPlaylist',
     url: `/listas-reproduccion/${id}/videos`,
     action: 'OBTENER VIDEOS DE LISTA DE REPRODUCCIÓN',
@@ -136,7 +136,7 @@ const GetVideosFromPlaylist = catchAsync(async (call, callback) => {
 });
 
 const RemoveVideoFromPlaylist = catchAsync(async (call, callback) => {
-  const { userId, playlistId, videoId } = call.request;
+  const { userId, userEmail, playlistId, videoId } = call.request;
 
   if (!userId){
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -176,7 +176,7 @@ const RemoveVideoFromPlaylist = catchAsync(async (call, callback) => {
 });
 
 const DeletePlaylist = catchAsync(async (call, callback) => {
-  const { userId, playlistId } = call.request;
+  const { userId, userEmail, playlistId } = call.request;
 
   if (!userId){
     return callback(new Error('El usuario debe haber iniciado sesión'));
@@ -196,7 +196,7 @@ const DeletePlaylist = catchAsync(async (call, callback) => {
 
   await publishLog('action', {
     userId: userId,
-    email: null,
+    email: userEmail,
     method: 'DeletePlaylist',
     url: `/listas-reproduccion/${id}`,
     action: 'ELIMINAR LISTA DE REPRODUCCIÓN',
